@@ -1,0 +1,237 @@
+---
+title: 'Final Project Code'
+author: 'Rebecca Baumann, Chang Gao, Jeffery Qian'
+# output: html_document
+# embed-resources: true
+format: html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+Model A:
+```{r}
+library(deSolve)
+```
+
+Part 1: Equations 
+```{r}
+# Parameters
+r_R <- 0.5      # resident whale growth rate
+K_R <- 30       # resident carrying capacity
+
+r_P <- 0.8      # pinniped growth rate
+K_P <- 500      # pinniped carrying capacity
+
+alpha <- 0.2    # effect of pinnipeds on residents
+beta  <- 0.6    # effect of residents on pinnipeds
+
+C   <- 0.02     # predation rate
+B   <- 0.2      # conversion efficiency
+D_T <- 0.1      # transient whale death rate
+```
+
+Initialization
+```{r}
+R0 <- 10
+P0 <- 200
+T0 <- 5
+
+state_ini <- c(R = R0,
+               P = P0,
+               T = T0)
+```
+
+Model A equations
+```{r}
+modelA <- function(time, state, parameters){
+
+  R <- state[1]
+  P <- state[2]
+  T <- state[3]
+
+  # Resident whales (competition with P)
+  dR <- r_R * R * (1 - (R + alpha*P)/K_R)
+
+  # Pinnipeds (competition + predation)
+  dP <- r_P * P * (1 - (P + beta*R)/K_P) -
+        C * P * T
+
+  # Transient whales (predator)
+  dT <- B * C * P * T -
+        D_T * T
+
+  return(list(c(dR, dP, dT)))
+}
+```
+
+Add time to this function
+```{r}
+time_vec <- seq(0, 200, length.out = 2000)
+
+outA <- ode(y = state_ini,
+            times = time_vec,
+            func = modelA,
+            parms = NULL)
+
+outA <- as.data.frame(outA)
+```
+
+Plot
+```{r}
+plot(outA$time, outA$R,
+     type = "l",
+     col = "blue",
+     lwd = 2,
+     ylim = c(0,600),
+     xlab = "Time",
+     ylab = "Population")
+
+lines(outA$time, outA$P,
+      col = "darkgreen",
+      lwd = 2)
+
+lines(outA$time, outA$T,
+      col = "red",
+      lwd = 2)
+
+legend("topright",
+       legend = c("Residents (R)",
+                  "Pinnipeds (P)",
+                  "Transients (T)"),
+       col = c("blue","darkgreen","red"),
+       lty = 1,
+       lwd = 2)
+```
+Conclusion: This graph proved that the presence of residents decreases the equilibrium population size of transients and transient increases residents as discussed in the paper. The system exhibits damped oscillations before converging to a stable interior equilibrium.
+The transient whales suppress pinnipeds, which reduces competition pressure on resident whales, allowing residents to increase in density.
+
+Part 2:Equilibrium 
+```{r}
+# Equilibrium (Model A)
+P_star <- D_T / (B * C)
+
+R_star <- K_R - (alpha * D_T) / (B * C)
+
+T_star <- (r_P / (C * K_P)) *
+          (K_P - (D_T / (B * C)) -
+           beta * K_R +
+           (alpha * beta * D_T) / (B * C))
+
+P_star
+R_star
+T_star
+```
+
+```{r}
+dR = 0
+dP = 0
+dT = 0
+
+# Test derivatives at equilibrium
+dR_test <- r_R * R_star *
+           (1 - (R_star + alpha * P_star) / K_R)
+
+dP_test <- r_P * P_star *
+           (1 - (P_star + beta * R_star) / K_P) -
+           C * P_star * T_star
+
+dT_test <- B * C * P_star * T_star -
+           D_T * T_star
+
+dR_test
+dP_test
+dT_test
+
+```
+
+Part 3: Equilibrium when absence
+```{r}
+# Equilibrium without competition
+R_not <- (K_R - alpha * K_P) /
+         (1 - alpha * beta)
+
+T_not <- (r_P / (C * K_P)) *
+         (K_P - (D_T / (B * C)))
+
+R_not
+T_not
+R_star > R_not
+T_star < T_not
+```
+Since both are true, plus-minus interaction is also true.
+
+Part 4: Test if the transient whale population will be smaller when both whales are present
+```{r}
+B * C * K_R > alpha * D_T
+```
+
+This is correspondence with the paper's conclusion.
+
+
+Model B: resident whales and pinnipeds have an indirect interaction.
+$$
+% \begin{aligned}
+% R'=&R(B_RC_RS-D_R) &\rm{resident\ whales}\\
+% T'=&T(B_TC_TP-D_T)&\rm{transient\ whales}\\
+% P'=&r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT&\rm{pinnipeds}\\
+% S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR &\rm{salmon}
+% \end{aligned}
+\begin{aligned}
+R'=&R(B_RC_RS-D_R)\\
+T'=&T(B_TC_TP-D_T)\\
+P'=&r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT\\
+S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
+\end{aligned}
+$$
+Observation: natural death rate of pennipeds and salmon seem to be ignored.
+
+Parameters:
+```{r}
+B_R=1 # birth rate of resident whales
+C_R=0.002 # Consumption/conversion rate of resident whales
+D_R=1 # death rate of resident whales
+
+B_T=1 # birth rate of transient whales
+C_T=0.002 # Consumption/conversion rate of resident whales
+D_T=1 # death rate of transient whales
+
+r_P=30 # growth rate of pinnipeds
+K_P=1000 # Carrying capacity of pinnipeds
+a=1 # attack rate on pinnipeds
+
+r_S=30 # growth rate of salmon
+K_S=1000 # Carrying capacity of salmon
+b=1 # attack rate on salmon
+```
+
+```{r}
+library(deSolve)
+require(deSolve)
+
+# predator-prey model
+LV <- function(time,state,para) {
+	B_R=para[1];C_r=para[2];D_R=para[3];B_T=para[4];C_T=para[5];D_T=para[6];r_P=para[7];K_P=para[8];a=para[9];r_S=para[10];K_S=para[11];b=para[12]
+	# state variables
+	R=state[1];T=state[2];P=state[3];S=state[4]
+	# equation
+	X1=R*(B_R*C_R*S-D_R)
+	X2=T*(B_T*C_T*P-D_T)
+	X3=r_P*P*(1-P/K_P-a*S/K_P)-C_T*P*T
+	X4=r_S*S*(1-S/K_S-b*P/K_S)-C_R*S*R
+
+	return(list(c(X1,X2,X3,X4)))
+}
+
+# input parameters
+para=c(B_R,C_R,D_R,B_T,C_T,D_T,r_P,K_P,a,r_S,K_S,b)
+# initialization
+time=seq(from=0,to=100,length=1000)
+ini=c(1,1,30,100)
+out=ode(ini,time,LV,para)
+```
+Plot
+```{r}
+plot(out,ylab="Population")
+```
+It seems that the population for resident whales and transient whales almost periodically dies out every 50 years. Pinnipeds and salmon population exhibit periodic change in this parameter setting.

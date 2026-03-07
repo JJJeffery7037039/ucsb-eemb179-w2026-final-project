@@ -1,0 +1,78 @@
+---
+title: 'Final project: predator-prey systems'
+author: 'Rebecca Baumann, Chang Gao, Jeffery Qian'
+output: html_document
+embed-resources: true
+# format: pdf
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+Model: resident whales and pinnipeds have an indirect interaction.
+$$
+% \begin{aligned}
+% R'=&R(B_RC_RS-D_R) &\rm{resident\ whales}\\
+% T'=&T(B_TC_TP-D_T)&\rm{transient\ whales}\\
+% P'=&r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT&\rm{pinnipeds}\\
+% S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR &\rm{salmon}
+% \end{aligned}
+\begin{aligned}
+R'=&R(B_RC_RS-D_R)\\
+T'=&T(B_TC_TP-D_T)\\
+P'=&r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT\\
+S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
+\end{aligned}
+$$
+Observation: natural death rate of pennipeds and salmon seem to be ignored.
+
+Parameters:
+```{r}
+B_R=1 # birth rate of resident whales
+C_R=0.002 # Consumption/conversion rate of resident whales
+D_R=1 # death rate of resident whales
+
+B_T=1 # birth rate of transient whales
+C_T=0.002 # Consumption/conversion rate of resident whales
+D_T=1 # death rate of transient whales
+
+r_P=30 # growth rate of pinnipeds
+K_P=1000 # Carrying capacity of pinnipeds
+a=1 # attack rate on pinnipeds
+
+r_S=30 # growth rate of salmon
+K_S=1000 # Carrying capacity of salmon
+b=1 # attack rate on salmon
+```
+
+```{r}
+library(deSolve)
+require(deSolve)
+
+# predator-prey model
+LV <- function(time,state,para) {
+	B_R=para[1];C_r=para[2];D_R=para[3];B_T=para[4];C_T=para[5];D_T=para[6];r_P=para[7];K_P=para[8];a=para[9];r_S=para[10];K_S=para[11];b=para[12]
+	# state variables
+	R=state[1];T=state[2];P=state[3];S=state[4]
+	# equation
+	X1=R*(B_R*C_R*S-D_R)
+	X2=T*(B_T*C_T*P-D_T)
+	X3=r_P*P*(1-P/K_P-a*S/K_P)-C_T*P*T
+	X4=r_S*S*(1-S/K_S-b*P/K_S)-C_R*S*R
+
+	return(list(c(X1,X2,X3,X4)))
+}
+
+# input parameters
+para=c(B_R,C_R,D_R,B_T,C_T,D_T,r_P,K_P,a,r_S,K_S,b)
+# initialization
+time=seq(from=0,to=100,length=1000)
+ini=c(1,1,30,100)
+out=ode(ini,time,LV,para)
+```
+Plot
+```{r}
+plot(out,ylab="Population")
+```
+It seems that the population for resident whales and transient whales almost periodically dies out every 50 years. Pinnipeds and salmon population exhibit periodic change in this parameter setting.

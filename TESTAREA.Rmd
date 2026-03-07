@@ -1,0 +1,110 @@
+---
+title: 'Code testing region'
+author: 'name'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 3 main populations:
+ P: Pinnipeds
+ R: Resident Whales
+ T: Transient Whales
+
+# 2 models: 1 is direct competition, 2 includes indirect competition
+
+# Part 1: Direct Competition Model
+
+#Basic interactions for competition represented by:
+ dP/dt = r_P*P[(K_P-P-beta*R)/K*P] - C*P*T
+ dR/dt = r_R*R(K_R-R-alpha*P)/K_R
+ dT/dt = T*(B*C*P-D_T)
+ 
+ 
+r_R: intrinsic rate of increase (resident whales)
+K_R: carrying capacity (resident whales)
+r_P:intrinsic rate of increase (pinnipeds)
+K_P: carrying capacity (pinnipeds)
+alpha: competition coefficient between pinnipeds and resident whales
+beta: competition coefficient between resident whales and pinnipeds
+C: the number of pinnipeds captured per unit of time per unit pinniped density by an average transient whale (basically consumption rate)
+B: the efficiency by which transient whales consume and assimilate pinnipeds
+D_T: the density-independent death rate of transient whales
+
+Notes: beta should be much larger than alpha
+K_R should be much smaller than K_P
+product of the competition coefficients should be less than 1
+
+```{r}
+# note: I am assigning these ones made up values, although I am following guidelines of x must be bigger than y, z*a must be greater than/less than zero, etc. generally just not sure what should be put
+r_R <-0.5
+r_P <-0.75
+K_R <- 30
+K_P <- 500
+alpha <- 5
+beta <- 150
+
+
+C <- 5 #assuming days time unit for now, like all whales catch 5/day style parameter
+B <- 0.1 #(based off of the 10% rule for now)
+D_T <- 0.04 #unsure what to put here, this is a test value
+tsetORCA <- seq(from = 0, to = 100, length.out = 20000)
+R.simuset <- NaN*tsetORCA
+```
+
+
+```{r}
+plot(x = tsetORCA, y = R,
+     type = 'l', las = 1, lwd = 2, col = Xcol,
+     xlab = 'Time', ylab = 'Resident whales')
+# fix plot values
+
+```
+
+
+#Equations have a single equilibrium point with positive population densities of all three types. This is specified by:
+
+P = D_T/(B*C)
+R = K_R - (alpha*DT/B*C)
+T = (r_P/C*K_P)[K_P - (D_T/B*C) - beta*K_R + (alpha*beta*D_T/B*C)]
+
+```{r}
+
+P <- D_T/(B*C)
+P
+R <- K_R - (alpha*D_T/B*C)
+R
+T <- (r_P/C*K_P)[K_P - (D_T/B*C) - beta*K_R + (alpha*beta*D_T/B*C)]
+T
+#uncertain as to why T is orange here
+```
+
+#The expressions for equilibrium densities can be compared with the equilibrium density that each type of whale would attain in the absence of the other. These are:
+
+R = (K_R-alpha*K_P)/(1-alpha*beta)
+T = (r_P/C*K_P)[Kp-(D_T/B*C)]
+
+
+```{r}
+
+R2 <- (K_R-alpha*K_P)/(1-alpha*beta)
+T2 <- (r_P/C*K_P)[K_P-(D_T/B*C)]
+
+R2
+T2
+
+```
+
+#testing the derivative equations
+
+```{r}
+#fix errors by setting up dt
+ dP/dt <- r_P*P[(K_P-P-beta*R)/K_P] - C*P*T
+ dR/dt <- r_R*R(K_R-R-alpha*P)/K_R
+ dT/dt <- T*(B*C*P-D_T)
+
+  
+```
+
