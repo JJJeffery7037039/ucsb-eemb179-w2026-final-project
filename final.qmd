@@ -15,6 +15,14 @@ library(deSolve)
 ```
 
 Part 1: Equations 
+$$
+\begin{aligned}
+R'=&r_RR(K_R-R-\alpha P)/K_R\\
+T'=&T(BCP-D_T)\\
+P'=&r_PP(K_P-P-\beta R)/K_P-CPT
+\end{aligned}
+$$
+Parameters
 ```{r}
 # Parameters
 r_R <- 0.5      # resident whale growth rate
@@ -188,21 +196,21 @@ Observation: natural death rate of pennipeds and salmon seem to be ignored.
 
 Parameters:
 ```{r}
-B_R=1 # birth rate of resident whales
-C_R=0.002 # Consumption/conversion rate of resident whales
-D_R=1 # death rate of resident whales
+B_R=0.1 # B is the efficiency with which resident whales consume and assimilate salmons
+C_R=0.01 # C is the number of salmon captured per unit time per unit pinniped density by an average resident whale
+D_R=0.1 # death rate of resident whales
 
-B_T=1 # birth rate of transient whales
-C_T=0.002 # Consumption/conversion rate of resident whales
-D_T=1 # death rate of transient whales
+B_T=0.2 # B is the efficiency with which transient whales consume and assimilate pinnipeds
+C_T=0.02 # C is the number of pinnipeds captured per unit time per unit pinniped density by an average transient whale
+D_T=0.2 # death rate of transient whales
 
-r_P=30 # growth rate of pinnipeds
-K_P=1000 # Carrying capacity of pinnipeds
+r_P=0.8 # growth rate of pinnipeds
+K_P=500 # Carrying capacity of pinnipeds
 a=0.7 # attack rate on pinnipeds
 
-r_S=30 # growth rate of salmon
-K_S=1000 # Carrying capacity of salmon
-b=0.9 # attack rate on salmon
+r_S=1 # growth rate of salmon
+K_S=2000 # Carrying capacity of salmon
+b=0.8 # attack rate on salmon
 ```
 
 ```{r}
@@ -227,7 +235,7 @@ LV <- function(time,state,para) {
 para=c(B_R,C_R,D_R,B_T,C_T,D_T,r_P,K_P,a,r_S,K_S,b)
 # initialization
 time=seq(from=0,to=100,length=1000)
-ini=c(10,5,100,200)
+ini=c(10,5,100,400)
 out=ode(ini,time,LV,para)
 ```
 Plot
