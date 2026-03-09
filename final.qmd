@@ -4,6 +4,8 @@ author: 'Rebecca Baumann, Chang Gao, Jeffery Qian'
 # output: html_document
 # embed-resources: true
 format: html
+# filters:
+#  - parse-latex
 ---
 
 ```{r setup, include=FALSE}
@@ -23,6 +25,53 @@ P'=&r_PP(K_P-P-\beta R)/K_P-CPT
 \end{aligned}
 $$
 Parameters
+```{=html}
+<table>
+    <tr>
+        <th>Parameters</th>
+        <th>Definitions</th>
+        <th>Value ranges</th>
+    </tr>
+    <tr>
+        <td>r<sub>R</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>R</sub></td>
+        <td>Carrying capacity for R</td>
+    </tr>
+    <tr>
+        <td>r<sub>P</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>P</sub></td>
+        <td>Carrying capacity for T</td>
+    </tr>
+    <tr>
+        <td>&alpha;</td>
+        <td>Competition coefficient between P and R</td>
+    </tr>
+    <tr>
+        <td>&beta;</td>
+        <td>Competition coefficient between P and R</td>
+    </tr>
+        <tr>
+        <td>C</td>
+        <td>Average number of pinnipeds captured per unit time per unit P density</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>B</td>
+        <td>Conversion efficiency for T to consume P</td>
+    </tr>
+    <tr>
+        <td>D<sub>T</sub></td>
+        <td>Death rate</td>
+    </tr>
+</table>
+```
+Paremeter constraints: $\alpha\beta<1$. $K_P\gg K_R$. $\beta\gg\alpha$. $BCK_P>D_T$.
 ```{r}
 # Parameters
 r_R <- 0.5      # resident whale growth rate
@@ -194,23 +243,41 @@ S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
 $$
 Observation: natural death rate of pennipeds and salmon seem to be ignored.
 
+Table of parameters:
+<!-- |c1|c2|c3|
+|---|---|---|
+|$B_R$|a|b|
+: Demo table {.triped .hover}
+
+```{=latex}
+\begin{table*}[]
+      \begin{tabular}{c|c|c|c}
+            k&-1&0&1\\
+            \hline P(k)&1/2&1/4&1/4
+      \end{tabular}
+\end{table*}
+``` -->
+
+
+
+
 Parameters:
 ```{r}
-B_R=0.1 # B is the efficiency with which resident whales consume and assimilate salmons
+B_R=0.01 # B is the efficiency with which resident whales consume and assimilate salmons
 C_R=0.01 # C is the number of salmon captured per unit time per unit pinniped density by an average resident whale
 D_R=0.1 # death rate of resident whales
 
-B_T=0.2 # B is the efficiency with which transient whales consume and assimilate pinnipeds
+B_T=0.05 # B is the efficiency with which transient whales consume and assimilate pinnipeds
 C_T=0.02 # C is the number of pinnipeds captured per unit time per unit pinniped density by an average transient whale
 D_T=0.2 # death rate of transient whales
 
 r_P=0.8 # growth rate of pinnipeds
 K_P=500 # Carrying capacity of pinnipeds
-a=0.7 # attack rate on pinnipeds
+a=0.12 # attack rate on pinnipeds
 
-r_S=1 # growth rate of salmon
+r_S=3 # growth rate of salmon
 K_S=2000 # Carrying capacity of salmon
-b=0.8 # attack rate on salmon
+b=0.1 # attack rate on salmon
 ```
 
 ```{r}
@@ -235,7 +302,7 @@ LV <- function(time,state,para) {
 para=c(B_R,C_R,D_R,B_T,C_T,D_T,r_P,K_P,a,r_S,K_S,b)
 # initialization
 time=seq(from=0,to=100,length=1000)
-ini=c(10,5,100,400)
+ini=c(10,5,400,1600)
 out=ode(ini,time,LV,para)
 ```
 Plot
