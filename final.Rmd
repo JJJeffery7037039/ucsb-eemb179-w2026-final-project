@@ -11,7 +11,7 @@ format: html
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 ```
-Model A:
+# Model A:
 ```{r}
 library(deSolve)
 ```
@@ -226,7 +226,7 @@ B * C * K_R > alpha * D_T
 This is correspondence with the paper's conclusion.
 
 
-Model B: resident whales and pinnipeds have an indirect interaction.
+# Model B: resident whales and pinnipeds have an indirect interaction.
 $$
 % \begin{aligned}
 % R'=&R(B_RC_RS-D_R) &\rm{resident\ whales}\\
