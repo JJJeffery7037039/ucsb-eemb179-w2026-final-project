@@ -151,10 +151,15 @@ P'=&amp;r_PP(K_P-P-\beta R)/K_P-CPT
 \end{aligned}
 \]</span> Parameters</p>
 <table>
+    <colgroup>
+        <col style="width:20%;">
+        <col style="width:60%;">
+        <col style="width:20%;">
+    </colgroup>
     <tbody><tr>
         <th>Parameters</th>
         <th>Definitions</th>
-        <th>Value ranges</th>
+        <!--<th>Value ranges</th>-->
     </tr>
     <tr>
         <td>r<sub>R</sub></td>
@@ -194,7 +199,7 @@ P'=&amp;r_PP(K_P-P-\beta R)/K_P-CPT
         <td>Death rate</td>
     </tr>
 </tbody></table>
-<p>Paremeter constraints: <span class="math inline">\(\alpha\beta&lt;1\)</span>. <span class="math inline">\(K_P\gg K_R\)</span>. <span class="math inline">\(\beta\gg\alpha\)</span>. <span class="math inline">\(BCK_P&gt;D_T\)</span>.</p>
+<p>Paremeter constraints: According to Baird, the strength of damping depends on the parameter: <span class="math inline">\(\alpha\beta&lt;1\)</span>; the smaller the value, the more intense damping is. Other constraints: <span class="math inline">\(K_P\gg K_R\)</span>. <span class="math inline">\(\beta\gg\alpha\)</span>. <span class="math inline">\(BCK_P&gt;D_T\)</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r_R <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># resident whale growth rate</span></span>
@@ -352,7 +357,14 @@ P'=&amp;r_PP(K_P-P-\beta R)/K_P-CPT
 </section>
 <section id="model-b-resident-whales-and-pinnipeds-have-an-indirect-interaction." class="level1">
 <h1>Model B: resident whales and pinnipeds have an indirect interaction.</h1>
-<p><span class="math display">\[
+<p>In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales has a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fin-1.png" class="img-fluid figure-img" width="300"></p>
+<figcaption>Food web for model B</figcaption>
+</figure>
+</div>
+<p>Equation for model B consists of 4 variables: populaiton density for resident whales, transient whales, pinnipeds, and salmon. <span class="math display">\[
 % \begin{aligned}
 % R'=&amp;R(B_RC_RS-D_R) &amp;\rm{resident\ whales}\\
 % T'=&amp;T(B_TC_TP-D_T)&amp;\rm{transient\ whales}\\
@@ -365,8 +377,83 @@ T'=&amp;T(B_TC_TP-D_T)\\
 P'=&amp;r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT\\
 S'=&amp;r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
 \end{aligned}
-\]</span> Observation: natural death rate of pennipeds and salmon seem to be ignored.</p>
-<p>Table of parameters: <!-- |c1|c2|c3|
+\]</span> As has been developed in the paper, there is an equilibrium for this system: <span class="math display">\[
+\begin{aligned}
+R^*=&amp;\frac{r_S}{C_R}(1-\frac{D_R}{K_SB_RC_R}-\frac{\beta D_T}{K_SB_TC_T})\\
+T^*=&amp;\frac{r_P}{C_T}(1-\frac{D_T}{K_PB_TC_T}-\frac{\alpha D_R}{K_PB_RC_R})\\
+P^*=&amp;\frac{D_T}{B_TC_T}\\
+S^*=&amp;\frac{D_R}{B_RC_R}
+\end{aligned}
+\]</span> Notice that in this indirect interaction model, increase in resident whale evolutionarily favored parameters, including conversion efficiency <span class="math inline">\(B_R\)</span> and capture rate <span class="math inline">\(C_R\)</span>, and decreasing death rate <span class="math inline">\(D_R\)</span>, will benefit transient whale equilibrium population. This is the same the other way around. The model therefore demonstrates that resident whales and transient whales have a mutualistic relation.</p>
+<p>Table of parameters:</p>
+<table>
+    <colgroup>
+        <col style="width:20%;">
+        <col style="width:60%;">
+        <col style="width:20%;">
+    </colgroup>
+    <tbody><tr>
+        <th>Parameters</th>
+        <th>Definitions</th>
+        <!--<th>Value ranges</th>-->
+    </tr>
+
+    <tr>
+        <td>B<sub>R</sub></td>
+        <td>Conversion efficiency for R to consume S</td>
+    </tr>
+    
+        <tr>
+        <td>C<sub>R</sub></td>
+        <td>Average number of S captured per unit time per unit S density</td>
+    </tr>
+    <tr>
+        <td>D<sub>R</sub></td>
+        <td>Death rate of transient whales</td>
+    </tr>
+
+    
+        <tr>
+        <td>B<sub>T</sub></td>
+        <td>Conversion efficiency for T to consume P</td>
+    </tr>
+    
+        <tr>
+        <td>C<sub>T</sub></td>
+        <td>Average number of pinnipeds captured per unit time per unit P density</td>
+    </tr>
+    <tr>
+        <td>D<sub>T</sub></td>
+        <td>Death rate of transient whales</td>
+    </tr>
+
+    <tr>
+        <td>r<sub>P</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>P</sub></td>
+        <td>Carrying capacity for P</td>
+    </tr>
+    <tr>
+        <td>α</td>
+        <td>Competition coefficient between P and S</td>
+    </tr>
+
+    <tr>
+        <td>r<sub>S</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>S</sub></td>
+        <td>Carrying capacity for S</td>
+    </tr>
+    <tr>
+        <td>β</td>
+        <td>Competition coefficient between P and S</td>
+    </tr>
+</tbody></table>
+<!-- |c1|c2|c3|
 |---|---|---|
 |$B_R$|a|b|
 : Demo table {.triped .hover}
@@ -378,25 +465,28 @@ S'=&amp;r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
             \hline P(k)&1/2&1/4&1/4
       \end{tabular}
 \end{table*}
-``` --></p>
+``` -->
+<section id="simulations" class="level2">
+<h2 class="anchored" data-anchor-id="simulations">Simulations</h2>
 <p>Parameters:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>B_R <span class="ot">=</span> <span class="fl">0.01</span>  <span class="co"># B is the efficiency with which resident whales consume and assimilate salmons</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>C_R <span class="ot">=</span> <span class="fl">0.01</span>  <span class="co"># C is the number of salmon captured per unit time per unit pinniped density by an average resident whale</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>B_R <span class="ot">=</span> <span class="fl">0.03</span>  <span class="co"># B is the efficiency with which resident whales consume and assimilate salmons</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>C_R <span class="ot">=</span> <span class="fl">0.01</span>  <span class="co"># C is the number of salmon captured per unit time per unit salmon density by an average resident whale</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>D_R <span class="ot">=</span> <span class="fl">0.1</span>  <span class="co"># death rate of resident whales</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>B_T <span class="ot">=</span> <span class="fl">0.05</span>  <span class="co"># B is the efficiency with which transient whales consume and assimilate pinnipeds</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>B_T <span class="ot">=</span> <span class="fl">0.08</span>  <span class="co"># B is the efficiency with which transient whales consume and assimilate pinnipeds</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>C_T <span class="ot">=</span> <span class="fl">0.02</span>  <span class="co"># C is the number of pinnipeds captured per unit time per unit pinniped density by an average transient whale</span></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>D_T <span class="ot">=</span> <span class="fl">0.2</span>  <span class="co"># death rate of transient whales</span></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>r_P <span class="ot">=</span> <span class="fl">0.8</span>  <span class="co"># growth rate of pinnipeds</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>r_P <span class="ot">=</span> <span class="dv">2</span>  <span class="co"># growth rate of pinnipeds</span></span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>K_P <span class="ot">=</span> <span class="dv">500</span>  <span class="co"># Carrying capacity of pinnipeds</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fl">0.12</span>  <span class="co"># attack rate on pinnipeds</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fl">0.1</span>  <span class="co"># attack rate on pinnipeds</span></span>
 <span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>r_S <span class="ot">=</span> <span class="dv">3</span>  <span class="co"># growth rate of salmon</span></span>
 <span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>K_S <span class="ot">=</span> <span class="dv">2000</span>  <span class="co"># Carrying capacity of salmon</span></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fl">0.1</span>  <span class="co"># attack rate on salmon</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fl">0.15</span>  <span class="co"># attack rate on salmon</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Simulation</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(deSolve)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(deSolve)</span>
@@ -439,7 +529,20 @@ S'=&amp;r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
 </div>
 <p>Plot</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out, <span class="at">ylab =</span> <span class="st">"Population"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resident whales</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out[,<span class="dv">1</span>],out[,<span class="dv">2</span>],<span class="at">xlab=</span><span class="st">"time"</span>,<span class="at">ylab=</span><span class="st">"Population Density"</span>,<span class="at">type=</span><span class="st">'l'</span>,<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ylim=c(0,max(c(out[,2],out[,3],out[,4],out[,5])))</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">500</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>col_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"black"</span>,<span class="st">"green"</span>,<span class="st">"red"</span>,<span class="st">"blue"</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>name_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"resident"</span>,<span class="st">"transient"</span>,<span class="st">"pinnipeds"</span>,<span class="st">"salmon"</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Transient whales, pinnipeds, and salmon</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">3</span>],<span class="at">col=</span>col_list[<span class="dv">2</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">4</span>],<span class="at">col=</span>col_list[<span class="dv">3</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">5</span>],<span class="at">col=</span>col_list[<span class="dv">4</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># legends</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,<span class="at">legend=</span>name_list,<span class="at">col=</span>col_list,<span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Time series plot"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -449,6 +552,13 @@ S'=&amp;r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
 </div>
 </div>
 <!-- It seems that the population for resident whales and transient whales almost periodically dies out every 50 years. Pinnipeds and salmon population exhibit periodic change in this parameter setting. -->
+<!-- Critique
+Natural death rate of pennipeds and salmon seem to be ignored. -->
+<p>Time series plot shows that population of resident whale, transient whale, pinnipeds, and salmon experience damped oscillation and tend to equilibrium.</p>
+</section>
+<section id="bifurcation-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="bifurcation-analysis">Bifurcation analysis</h2>
+</section>
 </section>
 
 </main>

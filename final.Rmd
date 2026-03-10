@@ -27,10 +27,15 @@ $$
 Parameters
 ```{=html}
 <table>
+    <colgroup>
+        <col style="width:20%;">
+        <col style="width:60%;">
+        <col style="width:20%;">
+    </colgroup>
     <tr>
         <th>Parameters</th>
         <th>Definitions</th>
-        <th>Value ranges</th>
+        <!--<th>Value ranges</th>-->
     </tr>
     <tr>
         <td>r<sub>R</sub></td>
@@ -71,7 +76,7 @@ Parameters
     </tr>
 </table>
 ```
-Paremeter constraints: $\alpha\beta<1$. $K_P\gg K_R$. $\beta\gg\alpha$. $BCK_P>D_T$.
+Paremeter constraints: According to Baird, the strength of damping depends on the  parameter: $\alpha\beta<1$; the smaller the value, the more intense damping is. Other constraints: $K_P\gg K_R$. $\beta\gg\alpha$. $BCK_P>D_T$.
 ```{r}
 # Parameters
 r_R <- 0.5      # resident whale growth rate
@@ -227,6 +232,11 @@ This is correspondence with the paper's conclusion.
 
 
 # Model B: resident whales and pinnipeds have an indirect interaction.
+In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales has a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.
+
+![Food web for model B](fin-1.png){width=300}
+
+Equation for model B consists of 4 variables: populaiton density for resident whales, transient whales, pinnipeds, and salmon.
 $$
 % \begin{aligned}
 % R'=&R(B_RC_RS-D_R) &\rm{resident\ whales}\\
@@ -241,9 +251,87 @@ P'=&r_PP(1-\frac{P}{K_P}-\frac{\alpha S}{K_P})-C_TPT\\
 S'=&r_SS(1-\frac{S}{K_S}-\frac{\beta P}{K_S})-C_RSR
 \end{aligned}
 $$
-Observation: natural death rate of pennipeds and salmon seem to be ignored.
+As has been developed in the paper, there is an equilibrium for this system:
+$$
+\begin{aligned}
+R^*=&\frac{r_S}{C_R}(1-\frac{D_R}{K_SB_RC_R}-\frac{\beta D_T}{K_SB_TC_T})\\
+T^*=&\frac{r_P}{C_T}(1-\frac{D_T}{K_PB_TC_T}-\frac{\alpha D_R}{K_PB_RC_R})\\
+P^*=&\frac{D_T}{B_TC_T}\\
+S^*=&\frac{D_R}{B_RC_R}
+\end{aligned}
+$$
+Notice that in this indirect interaction model, increase in resident whale evolutionarily favored parameters, including conversion efficiency $B_R$ and capture rate $C_R$, and decreasing death rate $D_R$, will benefit transient whale equilibrium population. This is the same the other way around. The model therefore demonstrates that resident whales and transient whales have a mutualistic relation.
 
 Table of parameters:
+```{=html}
+<table>
+    <colgroup>
+        <col style="width:20%;">
+        <col style="width:60%;">
+        <col style="width:20%;">
+    </colgroup>
+    <tr>
+        <th>Parameters</th>
+        <th>Definitions</th>
+        <!--<th>Value ranges</th>-->
+    </tr>
+
+    <tr>
+        <td>B<sub>R</sub></td>
+        <td>Conversion efficiency for R to consume S</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>C<sub>R</sub></td>
+        <td>Average number of S captured per unit time per unit S density</td>
+    </tr>
+    <tr>
+        <td>D<sub>R</sub></td>
+        <td>Death rate of transient whales</td>
+    </tr>
+
+    </tr>
+        <tr>
+        <td>B<sub>T</sub></td>
+        <td>Conversion efficiency for T to consume P</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>C<sub>T</sub></td>
+        <td>Average number of pinnipeds captured per unit time per unit P density</td>
+    </tr>
+    <tr>
+        <td>D<sub>T</sub></td>
+        <td>Death rate of transient whales</td>
+    </tr>
+
+    <tr>
+        <td>r<sub>P</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>P</sub></td>
+        <td>Carrying capacity for P</td>
+    </tr>
+    <tr>
+        <td>&alpha;</td>
+        <td>Competition coefficient between P and S</td>
+    </tr>
+
+    <tr>
+        <td>r<sub>S</sub></td>
+        <td>Intrinsic rate of increase</td>
+    </tr>
+    <tr>
+        <td>K<sub>S</sub></td>
+        <td>Carrying capacity for S</td>
+    </tr>
+    <tr>
+        <td>&beta;</td>
+        <td>Competition coefficient between P and S</td>
+    </tr>
+</table>
+```
 <!-- |c1|c2|c3|
 |---|---|---|
 |$B_R$|a|b|
@@ -258,28 +346,26 @@ Table of parameters:
 \end{table*}
 ``` -->
 
-
-
-
+## Simulations
 Parameters:
 ```{r}
-B_R=0.01 # B is the efficiency with which resident whales consume and assimilate salmons
-C_R=0.01 # C is the number of salmon captured per unit time per unit pinniped density by an average resident whale
+B_R=0.03 # B is the efficiency with which resident whales consume and assimilate salmons
+C_R=0.01 # C is the number of salmon captured per unit time per unit salmon density by an average resident whale
 D_R=0.1 # death rate of resident whales
 
-B_T=0.05 # B is the efficiency with which transient whales consume and assimilate pinnipeds
+B_T=0.08 # B is the efficiency with which transient whales consume and assimilate pinnipeds
 C_T=0.02 # C is the number of pinnipeds captured per unit time per unit pinniped density by an average transient whale
 D_T=0.2 # death rate of transient whales
 
-r_P=0.8 # growth rate of pinnipeds
+r_P=2 # growth rate of pinnipeds
 K_P=500 # Carrying capacity of pinnipeds
-a=0.12 # attack rate on pinnipeds
+a=0.1 # attack rate on pinnipeds
 
 r_S=3 # growth rate of salmon
 K_S=2000 # Carrying capacity of salmon
-b=0.1 # attack rate on salmon
+b=0.15 # attack rate on salmon
 ```
-
+Simulation
 ```{r}
 library(deSolve)
 require(deSolve)
@@ -307,6 +393,26 @@ out=ode(ini,time,LV,para)
 ```
 Plot
 ```{r}
-plot(out,ylab="Population")
+# Resident whales
+plot(out[,1],out[,2],xlab="time",ylab="Population Density",type='l',lwd=2,
+# ylim=c(0,max(c(out[,2],out[,3],out[,4],out[,5])))
+    ylim=c(0,500)
+)
+col_list=c("black","green","red","blue")
+name_list=c("resident","transient","pinnipeds","salmon")
+# Transient whales, pinnipeds, and salmon
+lines(out[,1],out[,3],col=col_list[2],lwd=2)
+lines(out[,1],out[,4],col=col_list[3],lwd=2)
+lines(out[,1],out[,5],col=col_list[4],lwd=2)
+# legends
+legend("topright",legend=name_list,col=col_list,lwd=c(2,2,2,2))
+title("Time series plot")
 ```
 <!-- It seems that the population for resident whales and transient whales almost periodically dies out every 50 years. Pinnipeds and salmon population exhibit periodic change in this parameter setting. -->
+
+<!-- Critique
+Natural death rate of pennipeds and salmon seem to be ignored. -->
+Time series plot shows that population of resident whale, transient whale, pinnipeds, and salmon experience damped oscillation and tend to equilibrium.
+
+
+## Bifurcation analysis
