@@ -416,3 +416,50 @@ Time series plot shows that population of resident whale, transient whale, pinni
 
 
 ## Bifurcation analysis
+<!-- Let's check the stability of equilibrium. The Jacobian of model B is:
+```{=latex}
+\begin{aligned}
+    df=\begin{pmatrix}
+        \frac{\partial R'}{\partial R}&\frac{\partial R'}{\partial T}&\frac{\partial R'}{\partial P}&\frac{\partial R'}{\partial S}\\
+        \frac{\partial T'}{\partial R}&\frac{\partial T'}{\partial T}&\frac{\partial T'}{\partial P}&\frac{\partial T'}{\partial S}\\
+        \frac{\partial P'}{\partial R}&\frac{\partial P'}{\partial T}&\frac{\partial P'}{\partial P}&\frac{\partial S'}{\partial S}\\
+        \frac{\partial S'}{\partial R}&\frac{\partial S'}{\partial T}&\frac{\partial S'}{\partial P}&\frac{\partial S'}{\partial S}\\
+    \end{pmatrix}=\begin{pmatrix}
+        B_RC_RS-D_R&0&0&B_RC_RR\\
+        0&B_TC_TP&B_TC_TT&0\\
+    \end{pmatrix}
+\end{aligned}
+``` -->
+Bifurcation on the carrying capacity of salmon $K_S$.
+```{r}
+# Initialization
+K_S_set=seq(K_S/4,K_S*7/4,length=100)
+Req_set=rep(NaN,length(K_S_set))
+Teq_set=rep(NaN,length(K_S_set))
+Peq_set=rep(NaN,length(K_S_set))
+Seq_set=rep(NaN,length(K_S_set))
+# simulation
+for (i in 1:length(K_S_set)) {
+    para[11]=K_S_set[i]
+    out=ode(ini,time,LV,para)
+    Req_set[i]=mean(tail(out[,2],10))
+    Teq_set[i]=mean(tail(out[,3],10))
+    Peq_set[i]=mean(tail(out[,4],10))
+    Seq_set[i]=mean(tail(out[,5],10))
+}
+# plot
+col_list=c("black","green","red","blue")
+name_list=c("resident","transient","pinnipeds","salmon")
+
+plot(K_S_set,Req_set,xlab="Salmon carrying capacity",ylab="Equilibrium population density",type='l',lwd=2,
+ylim=c(0,max(c(Req_set,Teq_set,Peq_set,Seq_set)))
+)
+# Transient whales, pinnipeds, and salmon
+lines(K_S_set,Teq_set,col=col_list[2],lwd=2)
+lines(K_S_set,Peq_set,col=col_list[3],lwd=2)
+lines(K_S_set,Seq_set,col=col_list[4],lwd=2)
+# legends
+legend("topleft",legend=name_list,col=col_list,lwd=c(2,2,2,2))
+title("Bifurcation diagram on K_S")
+```
+This bifurcation diagram shows that for this initial value set, the system will tend to the equilibrium as described in previous section. There is otherwise no observed limit structure or attractors, regardless of the carrying capacity of salmon. The algebraic expression for equilibrium analyzed in the previous section shows that only resident whale population is affected by salmon carrying capacity.

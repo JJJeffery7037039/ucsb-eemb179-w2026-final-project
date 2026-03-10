@@ -558,6 +558,61 @@ Natural death rate of pennipeds and salmon seem to be ignored. -->
 </section>
 <section id="bifurcation-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="bifurcation-analysis">Bifurcation analysis</h2>
+<!-- Let's check the stability of equilibrium. The Jacobian of model B is:
+```{=latex}
+\begin{aligned}
+    df=\begin{pmatrix}
+        \frac{\partial R'}{\partial R}&\frac{\partial R'}{\partial T}&\frac{\partial R'}{\partial P}&\frac{\partial R'}{\partial S}\\
+        \frac{\partial T'}{\partial R}&\frac{\partial T'}{\partial T}&\frac{\partial T'}{\partial P}&\frac{\partial T'}{\partial S}\\
+        \frac{\partial P'}{\partial R}&\frac{\partial P'}{\partial T}&\frac{\partial P'}{\partial P}&\frac{\partial S'}{\partial S}\\
+        \frac{\partial S'}{\partial R}&\frac{\partial S'}{\partial T}&\frac{\partial S'}{\partial P}&\frac{\partial S'}{\partial S}\\
+    \end{pmatrix}=\begin{pmatrix}
+        B_RC_RS-D_R&0&0&B_RC_RR\\
+        0&B_TC_TP&B_TC_TT&0\\
+    \end{pmatrix}
+\end{aligned}
+``` -->
+<p>Bifurcation on the carrying capacity of salmon <span class="math inline">\(K_S\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialization</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>K_S_set <span class="ot">=</span> <span class="fu">seq</span>(K_S<span class="sc">/</span><span class="dv">4</span>, K_S <span class="sc">*</span> <span class="dv">7</span><span class="sc">/</span><span class="dv">4</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Req_set <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NaN</span>, <span class="fu">length</span>(K_S_set))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>Teq_set <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NaN</span>, <span class="fu">length</span>(K_S_set))</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>Peq_set <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NaN</span>, <span class="fu">length</span>(K_S_set))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>Seq_set <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NaN</span>, <span class="fu">length</span>(K_S_set))</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># simulation</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(K_S_set)) {</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    para[<span class="dv">11</span>] <span class="ot">=</span> K_S_set[i]</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">=</span> <span class="fu">ode</span>(ini, time, LV, para)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    Req_set[i] <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">tail</span>(out[, <span class="dv">2</span>], <span class="dv">10</span>))</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    Teq_set[i] <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">tail</span>(out[, <span class="dv">3</span>], <span class="dv">10</span>))</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    Peq_set[i] <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">tail</span>(out[, <span class="dv">4</span>], <span class="dv">10</span>))</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    Seq_set[i] <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">tail</span>(out[, <span class="dv">5</span>], <span class="dv">10</span>))</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>col_list <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"green"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>)</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>name_list <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"resident"</span>, <span class="st">"transient"</span>, <span class="st">"pinnipeds"</span>, <span class="st">"salmon"</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(K_S_set, Req_set, <span class="at">xlab =</span> <span class="st">"Salmon carrying capacity"</span>, <span class="at">ylab =</span> <span class="st">"Equilibrium population density"</span>,</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(<span class="fu">c</span>(Req_set, Teq_set,</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>        Peq_set, Seq_set))))</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Transient whales, pinnipeds, and salmon</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(K_S_set, Teq_set, <span class="at">col =</span> col_list[<span class="dv">2</span>], <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(K_S_set, Peq_set, <span class="at">col =</span> col_list[<span class="dv">3</span>], <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(K_S_set, Seq_set, <span class="at">col =</span> col_list[<span class="dv">4</span>], <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a><span class="co"># legends</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> name_list, <span class="at">col =</span> col_list, <span class="at">lwd =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Bifurcation diagram on K_S"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="final_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This bifurcation diagram shows that for this initial value set, the system will tend to the equilibrium as described in previous section. There is otherwise no observed limit structure or attractors, regardless of the carrying capacity of salmon. The algebraic expression for equilibrium analyzed in the previous section shows that only resident whale population is affected by salmon carrying capacity.</p>
 </section>
 </section>
 
