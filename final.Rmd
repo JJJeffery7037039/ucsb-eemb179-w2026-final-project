@@ -3,14 +3,24 @@ title: 'Final Project Code'
 author: 'Rebecca Baumann, Chang Gao, Jeffery Qian'
 # output: html_document
 # embed-resources: true
-format: html
+format: 
+    html:
+        toc: true
+        appendix-style: none
 # filters:
 #  - parse-latex
+bibliography: ref.bib
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 ```
+
+# Introduction
+Citations (for generating bibliography): [@baird]. [@estes]. 
+
+
 # Model A:
 ```{r}
 library(deSolve)
@@ -232,9 +242,9 @@ This is correspondence with the paper's conclusion.
 
 
 # Model B: resident whales and pinnipeds have an indirect interaction.
-In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales has a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.
+In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales have a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.
 
-![Food web for model B](fin-1.png){width=300}
+![Food web for model B](eemb179-15.png){width=300}
 
 Equation for model B consists of 4 variables: populaiton density for resident whales, transient whales, pinnipeds, and salmon.
 $$
@@ -463,3 +473,7 @@ legend("topleft",legend=name_list,col=col_list,lwd=c(2,2,2,2))
 title("Bifurcation diagram on K_S")
 ```
 This bifurcation diagram shows that for this initial value set, the system will tend to the equilibrium as described in previous section. There is otherwise no observed limit structure or attractors, regardless of the carrying capacity of salmon. The algebraic expression for equilibrium analyzed in the previous section shows that only resident whale population is affected by salmon carrying capacity.
+
+
+
+# References

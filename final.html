@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="final_files/libs/clipboard/clipboard.min.js"></script>
@@ -104,10 +124,25 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#model-a" id="toc-model-a" class="nav-link" data-scroll-target="#model-a">Model A:</a></li>
+  <li><a href="#model-b-resident-whales-and-pinnipeds-have-an-indirect-interaction." id="toc-model-b-resident-whales-and-pinnipeds-have-an-indirect-interaction." class="nav-link" data-scroll-target="#model-b-resident-whales-and-pinnipeds-have-an-indirect-interaction.">Model B: resident whales and pinnipeds have an indirect interaction.</a>
+  <ul class="collapse">
+  <li><a href="#simulations" id="toc-simulations" class="nav-link" data-scroll-target="#simulations">Simulations</a></li>
+  <li><a href="#bifurcation-analysis" id="toc-bifurcation-analysis" class="nav-link" data-scroll-target="#bifurcation-analysis">Bifurcation analysis</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -135,6 +170,10 @@ window.Quarto = {
 </header>
 
 
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Citations (for generating bibliography): <span class="citation" data-cites="baird">(<a href="#ref-baird" role="doc-biblioref">Baird, Abrams, and Dill 1992</a>)</span>. <span class="citation" data-cites="estes">(<a href="#ref-estes" role="doc-biblioref">Estes et al. 2004</a>)</span>.</p>
+</section>
 <section id="model-a" class="level1">
 <h1>Model A:</h1>
 <div class="cell">
@@ -357,10 +396,10 @@ P'=&amp;r_PP(K_P-P-\beta R)/K_P-CPT
 </section>
 <section id="model-b-resident-whales-and-pinnipeds-have-an-indirect-interaction." class="level1">
 <h1>Model B: resident whales and pinnipeds have an indirect interaction.</h1>
-<p>In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales has a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.</p>
+<p>In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales have a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="fin-1.png" class="img-fluid figure-img" width="300"></p>
+<p><img src="eemb179-15.png" class="img-fluid figure-img" width="300"></p>
 <figcaption>Food web for model B</figcaption>
 </figure>
 </div>
@@ -614,6 +653,17 @@ Natural death rate of pennipeds and salmon seem to be ignored. -->
 </div>
 <p>This bifurcation diagram shows that for this initial value set, the system will tend to the equilibrium as described in previous section. There is otherwise no observed limit structure or attractors, regardless of the carrying capacity of salmon. The algebraic expression for equilibrium analyzed in the previous section shows that only resident whale population is affected by salmon carrying capacity.</p>
 </section>
+</section>
+<section id="references" class="level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-baird" class="csl-entry" role="listitem">
+Baird, Robin, Peter Abrams, and Lawrence Dill. 1992. <span>“Possible Indirect Interactions Between Transient and Resident Killer Whales: Implications for the Evolution of Foraging Specializations in the Genus Orcinus.”</span> <em>Oecologia</em> 89: 125–32.
+</div>
+<div id="ref-estes" class="csl-entry" role="listitem">
+Estes, J. A., E. M. Danner, D. F. Doak, B. Konar, A. M. Springer, P. D. Steinberg, M. T. Tinker, and T. M. Williams. 2004. <span>“Complex Trophic Interactions in Kelp Forest Ecosystems.”</span> <em>Bulletin of Marine Science</em> 74 (3): 621–38.
+</div>
+</div>
 </section>
 
 </main>
