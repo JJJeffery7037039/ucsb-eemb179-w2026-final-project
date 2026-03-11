@@ -139,6 +139,7 @@ window.Quarto = {
   <li><a href="#simulations" id="toc-simulations" class="nav-link" data-scroll-target="#simulations">Simulations</a></li>
   <li><a href="#bifurcation-analysis" id="toc-bifurcation-analysis" class="nav-link" data-scroll-target="#bifurcation-analysis">Bifurcation analysis</a></li>
   </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -172,7 +173,9 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Citations (for generating bibliography): <span class="citation" data-cites="baird">(<a href="#ref-baird" role="doc-biblioref">Baird, Abrams, and Dill 1992</a>)</span>. <span class="citation" data-cites="estes">(<a href="#ref-estes" role="doc-biblioref">Estes et al. 2004</a>)</span>.</p>
+<!-- Citations (for generating bibliography): [@baird]. [@estes].  -->
+<p>We use a mathematical model to simulate the interaction between two distinct types of killer whales, transient whales and resident whales, based on Baird and other’s work <span class="citation" data-cites="baird">(<a href="#ref-baird" role="doc-biblioref">Baird, Abrams, and Dill 1992</a>)</span>. Killer whales are apex predators, therefore they could influence the whole ocean ecosystem through top-down control from the top of the oceanic trophic cascade. For example, Estes and others have analyzed the whole-sale collapse of marine mammals in the North Pacific Ocean and southern Bering Sea <span class="citation" data-cites="estes">(<a href="#ref-estes" role="doc-biblioref">Estes et al. 2004</a>)</span>; discovering that killer whales were the major factor for this collapse as they turned to otters in the region seeking alternative food source, in response to decreasing sea lions population. The killer whales’ dietary shift ultimately result from human massive whale harvest after World War II. Therefore, understanding how killer whales interact with the ecosystem will help human make better decisions to preserving the ocean ecosystem, which is playing an ever-more important role in sinking carbon, countering the effect of climate change.</p>
+<p>According to Baird and others <span class="citation" data-cites="baird">(<a href="#ref-baird" role="doc-biblioref">Baird, Abrams, and Dill 1992</a>)</span>, there are two distinct types of killer whales: resident whales and transient whales.</p>
 </section>
 <section id="model-a" class="level1">
 <h1>Model A:</h1>
@@ -569,19 +572,20 @@ S^*=&amp;\frac{D_R}{B_RC_R}
 <p>Plot</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resident whales</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out[,<span class="dv">1</span>],out[,<span class="dv">2</span>],<span class="at">xlab=</span><span class="st">"time"</span>,<span class="at">ylab=</span><span class="st">"Population Density"</span>,<span class="at">type=</span><span class="st">'l'</span>,<span class="at">lwd=</span><span class="dv">2</span>,</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ylim=c(0,max(c(out[,2],out[,3],out[,4],out[,5])))</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">500</span>)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>col_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"black"</span>,<span class="st">"green"</span>,<span class="st">"red"</span>,<span class="st">"blue"</span>)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>name_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"resident"</span>,<span class="st">"transient"</span>,<span class="st">"pinnipeds"</span>,<span class="st">"salmon"</span>)</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Transient whales, pinnipeds, and salmon</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">3</span>],<span class="at">col=</span>col_list[<span class="dv">2</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">4</span>],<span class="at">col=</span>col_list[<span class="dv">3</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">5</span>],<span class="at">col=</span>col_list[<span class="dv">4</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="co"># legends</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,<span class="at">legend=</span>name_list,<span class="at">col=</span>col_list,<span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Time series plot"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    out[,<span class="dv">1</span>],out[,<span class="dv">2</span>],<span class="at">xlab=</span><span class="st">"time"</span>,<span class="at">ylab=</span><span class="st">"Population Density"</span>,<span class="at">type=</span><span class="st">'l'</span>,<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ylim=c(0,max(c(out[,2],out[,3],out[,4],out[,5])))</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">500</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>col_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"black"</span>,<span class="st">"green"</span>,<span class="st">"red"</span>,<span class="st">"blue"</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>name_list<span class="ot">=</span><span class="fu">c</span>(<span class="st">"resident"</span>,<span class="st">"transient"</span>,<span class="st">"pinnipeds"</span>,<span class="st">"salmon"</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Transient whales, pinnipeds, and salmon</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">3</span>],<span class="at">col=</span>col_list[<span class="dv">2</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">4</span>],<span class="at">col=</span>col_list[<span class="dv">3</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(out[,<span class="dv">1</span>],out[,<span class="dv">5</span>],<span class="at">col=</span>col_list[<span class="dv">4</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="co"># legends</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>,<span class="at">legend=</span>name_list,<span class="at">col=</span>col_list,<span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"Time series plot"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -653,6 +657,14 @@ Natural death rate of pennipeds and salmon seem to be ignored. -->
 </div>
 <p>This bifurcation diagram shows that for this initial value set, the system will tend to the equilibrium as described in previous section. There is otherwise no observed limit structure or attractors, regardless of the carrying capacity of salmon. The algebraic expression for equilibrium analyzed in the previous section shows that only resident whale population is affected by salmon carrying capacity.</p>
 </section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p>In summary, model A shows that transient whales could benefit resident whales population by suppressing the pinnipeds population, whose diet overlaps with that of resident whales. Similar result is drawn from model B, where transient whales and resident whales benefit each others’s population by feeding on species competing on same resources, such as pinnipeds and salmon. So both models suggest that transient whales could potentially benefit resident whale population.</p>
+<p>Relating to killer whales’s trophic control over ecosystem. The model suggests that when transient whales turn to other species, resident whales may also be negatively influenced by the departure of transients, and therefore may also turn to prey in other areas, disrupting local ecosystem. Therefore people should pay attention to the food web of both transient and resident whales when harvesting species in the dietary of either forms of whales. <!-- This may occur, for example, when
+human overhunt pinnipeds, causing transient whales to 
+ecosystem in other parts of region were tipped of balance by human hunting activities, leading transient whales to change diet and turn to alternative prey in the region. --></p>
+<p>A critque: the model may have overestimated the mutualistic effect of transient whales on resident whales, since resident whales and transient whales social groups generally avoid each other intentionally, it may be that they feed on species which are separated by time and space, leading to delay in the mutualistic effect between resident and transient whales, due to lack of regional competition between pinnipeds and salmon.</p>
 </section>
 <section id="references" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>

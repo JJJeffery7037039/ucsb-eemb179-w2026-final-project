@@ -2,4 +2,6 @@
 
 Final project for EEMB 179 at UCSB, winter 2026. For specific requirements, see [project guidelines](https://docs.google.com/document/d/1-Sbztb5BVettjOqjMZP3JMxo5LniY_nlMwmYEVu4llw/edit?tab=t.0)
 
-Our primary file right now is final.Rmd
+The focal paper is Baird-1992.
+
+Our primary file right now is final.Rmd, which is composed of code for generating images based on model A and model B, as well as background & introduction section for the final written report. 
