@@ -242,7 +242,95 @@ B * C * K_R > alpha * D_T
 ```
 
 This is correspondence with the paper's conclusion.
+Bifurcation Diagram: Predation Rate(C)
+```{r}
+C_seq <- seq(0.001, 0.1, length.out = 200)
+R_eq <- numeric(length(C_seq))
+P_eq <- numeric(length(C_seq))
+T_eq <- numeric(length(C_seq))
+for(i in 1:length(C_seq)){
 
+  C_temp <- C_seq[i]
+
+  modelA_temp <- function(time, state, parameters){
+
+    R <- state[1]
+    P <- state[2]
+    T <- state[3]
+
+    dR <- r_R * R * (1 - (R + alpha*P)/K_R)
+
+    dP <- r_P * P * (1 - (P + beta*R)/K_P) -
+          C_temp * P * T
+
+    dT <- B * C_temp * P * T -
+          D_T * T
+
+    return(list(c(dR,dP,dT)))
+  }
+
+  out <- ode(y = state_ini,
+             times = seq(0,500,by=1),
+             func = modelA_temp,
+             parms = NULL)
+
+  out <- as.data.frame(out)
+
+  R_eq[i] <- tail(out$R,1)
+  P_eq[i] <- tail(out$P,1)
+  T_eq[i] <- tail(out$T,1)
+}
+```
+Plotting:
+```{r}
+# Diagram 1
+# Resident whales
+plot(C_seq, R_eq,
+     type = "l",
+     col = "blue",
+     lwd = 2,
+     xlab = "Predation rate (C)",
+     ylab = "Equilibrium population",
+     main = "Residents (R)")
+
+legend("topright",
+       legend = "Residents",
+       col = "blue",
+       lty = 1,
+       lwd = 2)
+
+# Diagram 2
+# Pinnipeds
+plot(C_seq, P_eq,
+     type = "l",
+     col = "darkgreen",
+     lwd = 2,
+     xlab = "Predation rate (C)",
+     ylab = "Equilibrium population",
+     main = "Pinnipeds (P)")
+
+legend("topright",
+       legend = "Pinnipeds",
+       col = "darkgreen",
+       lty = 1,
+       lwd = 2)
+
+# Diagram 3
+# Transient whales
+plot(C_seq, T_eq,
+     type = "l",
+     col = "red",
+     lwd = 2,
+     xlab = "Predation rate (C)",
+     ylab = "Equilibrium population",
+     main = "Transients (T)")
+
+legend("topright",
+       legend = "Transients",
+       col = "red",
+       lty = 1,
+       lwd = 2)
+```
 
 # Model B: resident whales and pinnipeds have an indirect interaction.
 In model B, Pinnipeds compete with salmon over smaller fish. So resident whales and transient whales have a mutualistic relation; consuming one type of prey will make the other flourish, hence increasing the other predator. This might explain why there are two types of whales in the first place. See food web figure below.
